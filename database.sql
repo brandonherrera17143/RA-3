@@ -62,7 +62,7 @@ CREATE TABLE `detalle_venta` (
   KEY `fk_producto` (`id_producto`),
   CONSTRAINT `fk_factura` FOREIGN KEY (`id_numeroFactura`) REFERENCES `factura` (`numero_factura`),
   CONSTRAINT `fk_producto` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `detalle_venta` (
 
 LOCK TABLES `detalle_venta` WRITE;
 /*!40000 ALTER TABLE `detalle_venta` DISABLE KEYS */;
-INSERT INTO `detalle_venta` VALUES (1,1000,1,2,50.00,100.00),(2,1006,1,2,125.06,250.12),(3,1008,17,3,0.00,250.23),(4,1011,10,2,2.00,1554.92),(5,1012,1,2,125.06,250.12),(6,1016,1,0,125.06,0.00);
+INSERT INTO `detalle_venta` VALUES (1,1000,1,2,50.00,100.00),(2,1006,1,2,125.06,250.12),(3,1008,17,3,0.00,250.23),(4,1011,10,2,2.00,1554.92),(5,1012,1,2,125.06,250.12),(6,1016,1,0,125.06,0.00),(7,1017,8,4,100.02,400.08),(8,1017,13,2,5.71,11.42),(9,1018,3,3,697.88,2093.64),(10,1019,6,3,443.28,1329.84),(11,1019,4,3,692.84,2078.52),(12,1019,9,2,621.50,1243.00),(13,1020,8,2,100.02,200.04),(14,1020,9,2,621.50,1243.00),(15,1020,3,3,697.88,2093.64),(16,1020,24,1,501.09,501.09),(17,1021,4,2,692.84,1385.68),(18,1021,8,2,100.02,200.04),(19,1022,8,2,100.02,200.04),(20,1022,8,2,100.02,200.04),(21,1022,3,2,697.88,1395.76),(22,1022,24,2,501.09,1002.18),(23,1023,8,2,100.02,200.04),(24,1023,6,2,443.28,886.56),(25,1023,21,3,840.01,2520.03),(26,1023,15,1,401.61,401.61),(27,1024,12,4,570.74,2282.96),(28,1024,21,2,840.01,1680.02),(29,1024,23,4,192.86,771.44),(30,1024,18,1,978.92,978.92),(31,1024,5,2,906.07,1812.14);
 /*!40000 ALTER TABLE `detalle_venta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,7 +93,7 @@ CREATE TABLE `factura` (
   KEY `fk_cliente` (`id_cliente`),
   CONSTRAINT `fk_cliente` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`codigo`),
   CONSTRAINT `fk_vendedor` FOREIGN KEY (`id_vendedor`) REFERENCES `vendedores` (`codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=1017 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1025 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +102,7 @@ CREATE TABLE `factura` (
 
 LOCK TABLES `factura` WRITE;
 /*!40000 ALTER TABLE `factura` DISABLE KEYS */;
-INSERT INTO `factura` VALUES (1000,'2021-10-10',4,2,100.00),(1002,'2023-02-02',5,5,200.00),(1003,'2023-09-09',6,6,400.00),(1004,'2023-10-10',7,6,550.00),(1005,'2023-10-10',7,6,550.00),(1006,'2023-05-02',5,5,250.12),(1008,'2023-10-10',7,10,250.23),(1011,'2023-05-02',21,2,1554.92),(1012,'2023-05-02',21,2,250.12),(1013,'2023-05-02',21,2,0.00),(1014,'2023-05-02',21,2,0.00),(1015,'2023-05-02',21,2,0.00),(1016,'2023-05-02',21,2,0.00);
+INSERT INTO `factura` VALUES (1000,'2021-10-10',4,2,100.00),(1002,'2023-02-02',5,5,200.00),(1003,'2023-09-09',6,6,400.00),(1004,'2023-10-10',7,6,550.00),(1005,'2023-10-10',7,6,550.00),(1006,'2023-05-02',5,5,250.12),(1008,'2023-10-10',7,10,250.23),(1011,'2023-05-02',21,2,1554.92),(1012,'2023-05-02',21,2,250.12),(1013,'2023-05-02',21,2,0.00),(1014,'2023-05-02',21,2,0.00),(1015,'2023-05-02',21,2,0.00),(1016,'2023-05-02',21,2,0.00),(1017,'2023-05-04',21,8,411.50),(1018,'2023-05-04',21,1,2093.64),(1019,'2023-05-04',21,15,4651.36),(1020,'2023-05-04',21,9,4037.77),(1021,'2023-05-04',21,2,1585.72),(1022,'2023-05-04',21,1,2798.02),(1023,'2023-05-04',21,27,4008.24),(1024,'2023-05-04',7,26,7525.48);
 /*!40000 ALTER TABLE `factura` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -129,7 +129,7 @@ CREATE TABLE `productos` (
 
 LOCK TABLES `productos` WRITE;
 /*!40000 ALTER TABLE `productos` DISABLE KEYS */;
-INSERT INTO `productos` VALUES (1,'vatidora','para realizar mezclas',0,125.06),(3,'Oil - Grapeseed Oil','Bednar, King and Kilback',45,697.88),(4,'Tuna - Salad Premix','Green and Sons',44,692.84),(5,'Pails With Lids','Jakubowski-Kling',37,906.07),(6,'Sparkling Wine - Rose, Freixenet','Schowalter-Morissette',46,443.28),(7,'Milk - Skim','Graham, Miller and Weissnat',100,259.72),(8,'Herb Du Provence - Primerba','Emard, Haag and Larkin',39,100.02),(9,'Cookies - Englishbay Wht','Keebler, Bogisich and Mann',56,621.50),(10,'Coffee Cup 8oz 5338cd','Simonis-Mohr',0,777.46),(11,'Lettuce - Boston Bib','Cremin-Hintz',11,987.36),(12,'Noodles - Cellophane, Thin','Skiles, Block and Konopelski',66,570.74),(13,'Mushroom - King Eryingii','Kilback, Goyette and Padberg',64,5.71),(14,'Tortillas - Flour, 8','Mohr and Sons',38,774.83),(15,'Chevere Logs','Macejkovic, Heathcote and Keeling',37,401.61),(16,'Tea - Decaf Lipton','Ledner-Abshire',2,363.67),(17,'Lettuce - Iceberg','Osinski-Runolfsdottir',6,83.41),(18,'Chips Potato Salt Vinegar 43g','Mueller, Moen and Kirlin',41,978.92),(19,'Mushroom - Oyster, Fresh','Hudson-Beahan',44,962.29),(20,'Peas - Pigeon, Dry','Jakubowski, Morissette and Kulas',35,877.97),(21,'Gatorade - Xfactor Berry','Kassulke-Hand',79,840.01),(22,'Smoked Tongue','Haley LLC',30,667.36),(23,'Carrots - Mini, Stem On','Gislason, Runolfsson and Murazik',35,192.86),(24,'Cake - Pancake','Barrows Inc',53,501.09),(25,'Sauce - Vodka Blush','Torp, Howe and Daniel',30,382.20);
+INSERT INTO `productos` VALUES (1,'vatidora','para realizar mezclas',0,125.06),(3,'Oil - Grapeseed Oil','Bednar, King and Kilback',37,697.88),(4,'Tuna - Salad Premix','Green and Sons',39,692.84),(5,'Pails With Lids','Jakubowski-Kling',35,906.07),(6,'Sparkling Wine - Rose, Freixenet','Schowalter-Morissette',41,443.28),(7,'Milk - Skim','Graham, Miller and Weissnat',100,259.72),(8,'Herb Du Provence - Primerba','Emard, Haag and Larkin',25,100.02),(9,'Cookies - Englishbay Wht','Keebler, Bogisich and Mann',52,621.50),(10,'Coffee Cup 8oz 5338cd','Simonis-Mohr',0,777.46),(11,'Lettuce - Boston Bib','Cremin-Hintz',11,987.36),(12,'Noodles - Cellophane, Thin','Skiles, Block and Konopelski',62,570.74),(13,'Mushroom - King Eryingii','Kilback, Goyette and Padberg',62,5.71),(14,'Tortillas - Flour, 8','Mohr and Sons',38,774.83),(15,'Chevere Logs','Macejkovic, Heathcote and Keeling',36,401.61),(16,'Tea - Decaf Lipton','Ledner-Abshire',2,363.67),(17,'Lettuce - Iceberg','Osinski-Runolfsdottir',6,83.41),(18,'Chips Potato Salt Vinegar 43g','Mueller, Moen and Kirlin',40,978.92),(19,'Mushroom - Oyster, Fresh','Hudson-Beahan',44,962.29),(20,'Peas - Pigeon, Dry','Jakubowski, Morissette and Kulas',35,877.97),(21,'Gatorade - Xfactor Berry','Kassulke-Hand',74,840.01),(22,'Smoked Tongue','Haley LLC',30,667.36),(23,'Carrots - Mini, Stem On','Gislason, Runolfsson and Murazik',31,192.86),(24,'Cake - Pancake','Barrows Inc',50,501.09),(25,'Sauce - Vodka Blush','Torp, Howe and Daniel',30,382.20);
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -198,4 +198,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-02 15:53:03
+-- Dump completed on 2023-05-04 12:48:47

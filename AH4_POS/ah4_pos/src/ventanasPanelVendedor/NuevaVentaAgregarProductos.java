@@ -10,16 +10,17 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import java.awt.HeadlessException;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -54,20 +55,12 @@ public class NuevaVentaAgregarProductos extends javax.swing.JPanel {
     public NuevaVentaAgregarProductos() {
 
         initComponents();
+        Vendedor nombre = null;
         fechaFactura();
         asignarFactura();
-        Vendedor nombre = null;
-        datosVendedor(nombre);
-
     }
 
     public void datosCliente(Cliente cliente) {
-
-    }
-
-//
-    public void datosVendedor(Vendedor vendedor) {
-        // lblNombreC.setText("hoola " +vendedor.getCodigo()+"");
 
     }
 
@@ -456,9 +449,8 @@ public class NuevaVentaAgregarProductos extends javax.swing.JPanel {
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         try {
-            // agregarProductoFactura();
             datosFactura();
-        } catch (ParseException ex) {
+        } catch (SQLException | ParseException ex) {
             Logger.getLogger(NuevaVentaAgregarProductos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnVenderActionPerformed
@@ -469,6 +461,7 @@ public class NuevaVentaAgregarProductos extends javax.swing.JPanel {
 
         agregarListaProductos();
         totalFacturPorCliente();
+
         llenar();
 
     }//GEN-LAST:event_btnAgregarProductoActionPerformed
@@ -613,26 +606,6 @@ public class NuevaVentaAgregarProductos extends javax.swing.JPanel {
         }
     }
 
-//    public void agregarProductoFactura() throws java.text.ParseException {
-//        
-//        String fecha = lblFechaEmision.getText();
-//        String patron = "dd/MM/yyyy";
-//        SimpleDateFormat sdf = new SimpleDateFormat(patron);
-//        java.sql.Date fechasql = new java.sql.Date(sdf.parse(fecha).getTime());
-//
-//        int idVen = idVendedor;
-//        int idCli = idCliente;
-//        
-//        System.out.println("cliente para mandar = " +idCliente);
-//        System.out.println("vendedor para mandar = "+ idVendedor);
-//        int idProdu = Integer.parseInt(txtCodigoProducto.getText());
-//        int cantidad = Integer.parseInt(txtCantidadProducto.getText());
-//        float precioUni = Float.parseFloat(txtPrecioPro.getText());
-//       // FacturaDaoRe in = new FacturaDaoRe();
-//        System.out.println("fecha = " + fechasql + ", vendedor = " + idVen + ", id cliente = " + idCli + ", id producto = " + idProdu + ", cantidad = " + cantidad + ", precion uni =" + precioUni);
-//
-//        //in.crear_factura(fechasql, idVen, idCli, idProdu, cantidad, precioUni);
-//    }
     //Muestra la fecha actual.
     public void fechaFactura() {
         LocalDate fechaAc = LocalDate.now();
@@ -684,7 +657,7 @@ public class NuevaVentaAgregarProductos extends javax.swing.JPanel {
     int factura = 0;
 
     //mandamos datos para crear la factura:
-    public void datosFactura() throws ParseException {
+    public void datosFactura() throws ParseException, SQLException {
         String fecha = lblFechaEmision.getText();
         String patron = "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(patron);
@@ -695,22 +668,13 @@ public class NuevaVentaAgregarProductos extends javax.swing.JPanel {
         float totalFac = totalFactura;
         FacturaDaoRe enviar = new FacturaDaoRe();
 
-        System.out.println("datton enviado = " + fechasql + " - id vendedor = " + idVen + ", id cliente = " + idCli + ", total factura = " + totalFac);
         factura = enviar.crearFactura(fechasql, idVen, idCli, totalFac);
-        System.out.println("id factura obtenida = " + factura);
         enviar.agregarPraFacturas(factura, fac);
+        exportarPDF(factura);
 
     }
 
-    //agregar productos a facturas
-//     public void agregarProductosFactura(){
-//        int idFac = factura;
-//        
-//         FacturaDaoRe enviar = new FacturaDaoRe();
-//         enviar.agregarPraFacturas(idFac, fac);
-//        
-//    }
-    //se llena la tabla con el pedido del cliente;
+    // se llena la tabla con la lista de los productos del cliente
     public void llenar() {
         modelo = new DefaultTableModel(new String[]{"Codigo", "Nombre", "Cantidad", "Precio", "SubTotal"}, fac.size());
         jTable1.setModel(modelo);
@@ -725,175 +689,112 @@ public class NuevaVentaAgregarProductos extends javax.swing.JPanel {
         }
     }
 
-    //creamos el PDF
-//    public void exportarPDF() {
-//        Document doc = new Document();
-//        try {
-////            String ruta = System.getProperty("user.home");
-////            PdfWriter.getInstance(doc, new FileOutputStream(ruta + "/Desktop/Reporte_Productos.pdf"));
-//            
-//            FileOutputStream gen = new FileOutputStream("factura.pdf");
-//            
-//
-//            PdfWriter.getInstance(doc, gen);
-//            doc.open();
-//            
-//            Paragraph titulo = new Paragraph("Reporte de Clientes");
-//            titulo.setAlignment(Element.ALIGN_CENTER);
-//            Font fontTitulo = FontFactory.getFont(FontFactory.COURIER, 18, Font.BOLD, new BaseColor(0, 102, 204));
-//            titulo.setFont(fontTitulo);
-//            doc.add(titulo);
-//
-//            doc.add(new Paragraph("\n"));
-//            PdfPTable tabla = new PdfPTable(4);
-//            tabla.setWidthPercentage(100);
-//
-//            float[] cAn = {1f, 1f, 2f, 1f};
-//            tabla.setWidths(cAn);
-//
-//            Font fontHeader = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
-//
-//            PdfPCell celdaNombre = new PdfPCell(new Phrase("Nombre", fontHeader));
-//            celdaNombre.setBackgroundColor(BaseColor.GRAY);
-//            tabla.addCell(celdaNombre);
-//
-//            PdfPCell celdaNit = new PdfPCell(new Phrase("Nit", fontHeader));
-//            celdaNit.setBackgroundColor(BaseColor.GRAY);
-//            tabla.addCell(celdaNit);
-//
-//            PdfPCell celdaCorreo = new PdfPCell(new Phrase("Correo", fontHeader));
-//            celdaCorreo.setBackgroundColor(BaseColor.GRAY);
-//            tabla.addCell(celdaCorreo);
-//
-//            PdfPCell celdaG = new PdfPCell(new Phrase("Genero", fontHeader));
-//            celdaG.setBackgroundColor(BaseColor.GRAY);
-//            tabla.addCell(celdaG);
-//            try {
-//                String sql = "select * from clientes";
-//                con = acceso.Conectar();
-//                ps = con.prepareStatement(sql);
-//                rs = ps.executeQuery();
-//                if (rs.next()) {
-//                    do {
-//                        tabla.addCell(rs.getString(2));
-//                        tabla.addCell(rs.getString(3));
-//                        tabla.addCell(rs.getString(4));
-//                        tabla.addCell(rs.getString(5));
-//                    } while (rs.next());
-//                    doc.add(tabla);
-//                }
-//            } catch (DocumentException | SQLException e) {
-//            }
-//            doc.close();
-//            JOptionPane.showMessageDialog(null, "Reporte Creado.");
-//        } catch (DocumentException | HeadlessException | FileNotFoundException e) {
-//        }
-//    }
     public void exportarPDF(int id) throws SQLException {
         Document doc = new Document();
         try {
-//            String ruta = System.getProperty("user.home");
-//            PdfWriter.getInstance(doc, new FileOutputStream(ruta + "/Desktop/Reporte_Productos.pdf"));
-            String sql = "select vendedores.caja, factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura \n"
-                    + "from factura \n"
-                    + "inner join vendedores on factura.id_vendedor = vendedores.codigo \n"
-                    + "inner join clientes on factura.id_cliente = clientes.codigo where numero_factura ='" + id + "';";
-
-            con = acceso.Conectar();
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, 1);
-            rs = ps.executeQuery();
-            rs.next();
-
-            Document document = new Document(PageSize.A4, 50, 50, 50, 50);
-            PdfWriter.getInstance(document, new FileOutputStream("factura.pdf"));
-            document.open();
-
-            PdfPTable table = new PdfPTable(2);
-            table.setWidthPercentage(100);
-            table.setSpacingBefore(20f);
-            table.setSpacingAfter(20f);
-            
-            PdfPCell cell;
-            cell = new PdfPCell(new Phrase("Fecha: "));
-            cell.setBorder(Rectangle.NO_BORDER);
-            table.addCell(cell);
-            
-            cell = new PdfPCell(new Phrase(rs.getDate("fecha").toString()));
-            cell.setBorder(Rectangle.NO_BORDER);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase("Cliente: "));
-            cell.setBorder(Rectangle.NO_BORDER);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase(rs.getString("cliente")));
-            cell.setBorder(Rectangle.NO_BORDER);
-            table.addCell(cell);
-
-            document.add(table);
-            
-            sql = "SELECT * FROM factura WHERE numero_factura='"+id+"';";
-            ps = con.prepareStatement(sql);
-             ps.setInt(1,);
-            rs = ps.executeQuery();
-            
-            FileOutputStream gen = new FileOutputStream("factura.pdf");
-
-            PdfWriter.getInstance(doc, gen);
-            doc.open();
-
-            Paragraph titulo = new Paragraph("Reporte de Clientes");
-            titulo.setAlignment(Element.ALIGN_CENTER);
-            Font fontTitulo = FontFactory.getFont(FontFactory.COURIER, 18, Font.BOLD, new BaseColor(0, 102, 204));
-            titulo.setFont(fontTitulo);
-            doc.add(titulo);
-
-            doc.add(new Paragraph("\n"));
-            PdfPTable tabla = new PdfPTable(4);
-            tabla.setWidthPercentage(100);
-
-            float[] cAn = {1f, 1f, 2f, 1f};
-            tabla.setWidths(cAn);
-
-            Font fontHeader = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
-
-            PdfPCell celdaNombre = new PdfPCell(new Phrase("Nombre", fontHeader));
-            celdaNombre.setBackgroundColor(BaseColor.GRAY);
-            tabla.addCell(celdaNombre);
-
-            PdfPCell celdaNit = new PdfPCell(new Phrase("Nit", fontHeader));
-            celdaNit.setBackgroundColor(BaseColor.GRAY);
-            tabla.addCell(celdaNit);
-
-            PdfPCell celdaCorreo = new PdfPCell(new Phrase("Correo", fontHeader));
-            celdaCorreo.setBackgroundColor(BaseColor.GRAY);
-            tabla.addCell(celdaCorreo);
-
-            PdfPCell celdaG = new PdfPCell(new Phrase("Genero", fontHeader));
-            celdaG.setBackgroundColor(BaseColor.GRAY);
-            tabla.addCell(celdaG);
             try {
-                String sqls = "select * from clientes";
+                String sql = "select vendedores.caja, factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura from factura inner join vendedores on factura.id_vendedor = vendedores.codigo inner join clientes on factura.id_cliente = clientes.codigo where numero_factura =?;";
                 con = acceso.Conectar();
-                ps = con.prepareStatement(sqls);
+                ps = con.prepareStatement(sql);
+                ps.setInt(1, id);
+
+                FileOutputStream gen = new FileOutputStream("factura.pdf");
+
+                PdfWriter.getInstance(doc, gen);
+
+                doc.open();
+
                 rs = ps.executeQuery();
                 if (rs.next()) {
-                    do {
-                        tabla.addCell(rs.getString(2));
-                        tabla.addCell(rs.getString(3));
-                        tabla.addCell(rs.getString(4));
-                        tabla.addCell(rs.getString(5));
-                    } while (rs.next());
-                    doc.add(tabla);
-                }
+                    Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, Font.BOLD, new BaseColor(0, 0, 0));
+                    Paragraph titulo = new Paragraph("Facturar Señor(a): " + rs.getString(4), fontTitulo);
+                    titulo.setAlignment(Element.ALIGN_LEFT);
+                    doc.add(titulo);
+
+                    Font fontTitulo3 = FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD, new BaseColor(59, 67, 73));
+                    Paragraph titulo3 = new Paragraph("No. Factura: " + rs.getInt(2), fontTitulo3);
+                    titulo.setAlignment(Element.ALIGN_RIGHT);
+                    doc.add(titulo3);
+
+                    Paragraph titulo4 = new Paragraph("Nit: " + rs.getInt(3), fontTitulo3);
+                    titulo.setAlignment(Element.ALIGN_RIGHT);
+                    doc.add(titulo4);
+
+                    Paragraph titulo5 = new Paragraph("Fecha: " + rs.getDate(5), fontTitulo3);
+                    titulo.setAlignment(Element.ALIGN_RIGHT);
+                    doc.add(titulo5);
+
+                    Paragraph titulo6 = new Paragraph("Total Factura: " + rs.getFloat(6), fontTitulo3);
+                    titulo.setAlignment(Element.ALIGN_RIGHT);
+                    doc.add(titulo6);
+
+                    doc.add(new Paragraph("\n"));
+                    PdfPTable tabla = new PdfPTable(4);
+                    tabla.setWidthPercentage(100);
+
+                    float[] cAn = {0.70f, 2f, 0.80f, 1f};
+                    tabla.setWidths(cAn);
+
+                    Font fontHeader = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
+
+                    tabla.setWidthPercentage(100);
+                    tabla.setSpacingBefore(20f);
+                    tabla.setSpacingAfter(20f);
+
+                    PdfPCell celdaC = new PdfPCell(new Phrase("Cantidad", fontHeader));
+                    celdaC.setBackgroundColor(BaseColor.GRAY);
+                    tabla.addCell(celdaC);
+
+                    PdfPCell celdaN = new PdfPCell(new Phrase("Nombre", fontHeader));
+                    celdaN.setBackgroundColor(BaseColor.GRAY);
+                    tabla.addCell(celdaN);
+
+                    PdfPCell celdaP = new PdfPCell(new Phrase("Precio", fontHeader));
+                    celdaP.setBackgroundColor(BaseColor.GRAY);
+                    tabla.addCell(celdaP);
+
+                    PdfPCell celdaT = new PdfPCell(new Phrase("Total", fontHeader));
+                    celdaT.setBackgroundColor(BaseColor.GRAY);
+                    tabla.addCell(celdaT);
+
+                    String sql2 = "SELECT detalle_venta.cantidad, productos.nombre, detalle_venta.precioUnitario, detalle_venta.totalDetalle from detalle_venta INNER JOIN productos on detalle_venta.id_producto = productos.codigo WHERE id_numeroFactura =?;";
+                    ps = con.prepareStatement(sql2);
+                    ps.setInt(1, id);
+                    rs = ps.executeQuery();
+                    if (rs.next()) {
+                        Font fontTitulo2 = FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD, new BaseColor(0, 102, 204));
+                        Paragraph titulo2 = new Paragraph("Detalle Factura", fontTitulo2);
+                        doc.add(titulo2);
+                        do {
+
+                            tabla.addCell(rs.getString(1));
+                            tabla.addCell(rs.getString(2));
+                            tabla.addCell(rs.getString(3));
+                            tabla.addCell(rs.getString(4));
+                        } while (rs.next());
+
+                        doc.add(tabla);
+                    }
+                } // fin del if
             } catch (DocumentException | SQLException e) {
             }
+
             doc.close();
-            JOptionPane.showMessageDialog(null, "Reporte Creado.");
-        } catch (DocumentException | HeadlessException | FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "Venta Exitosa.");
+
+        } catch (HeadlessException | FileNotFoundException e) {
         }
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().open(new File("factura.pdf"));
+            } catch (IOException ex) {
+
+            }
+
+        }
+
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarProducto;

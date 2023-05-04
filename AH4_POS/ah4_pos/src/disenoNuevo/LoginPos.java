@@ -280,42 +280,6 @@ public class LoginPos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCorreoNoExisteKeyPressed
 
-    // INICIAMOS EL LOGIN  
-//    public void InicioLogin() {
-//
-//        String correo = txtUser.getText();
-//        String contra = txtPass.getText();
-//        if (correo.equals("admin") && contra.equals("admin")) {
-//            panel.setVisible(true);
-//            this.dispose();
-//        } else {
-//            if (in.verificarCorreo(correo).equals(correo)) {
-//                if (in.inicioSesion(txtUser.getText(), txtPass.getText())) {
-//
-//                    System.out.println("devuelvo = " +in.inicioSesion(txtUser.getText(), txtPass.getText()));
-//
-//                    this.dispose();    
-//                } else {
-//                    intentos -= 1;
-//                    txtPassMala.setText("Contrasenia incorrecta, te quedan " + intentos + " intentos");
-//                    txtCorreoNoExiste.setText("");
-//                    if (intentos == 1) {
-//                        txtPassMala.setText("Contrasenia incorrecta, te queda " + intentos + " intento");
-//                        txtCorreoNoExiste.setText("");
-//                    }
-//                    if (intentos == 0) {
-//                        JOptionPane.showMessageDialog(null, "Usuario " + correo + " Bloqueado");
-//                        btnIniciarSesion.setEnabled(false);
-//                        txtCorreoNoExiste.setText("");
-//                        txtPassMala.setText("");
-//                    }
-//                }
-//            } else {
-//                txtCorreoNoExiste.setText("Usuario no existe");
-//                txtPassMala.setText("");
-//            }
-//        }
-//    }
     public void limpiarTexto(boolean limpiar) {
         if (limpiar) {
             txtCorreoNoExiste.setText("");
@@ -337,7 +301,6 @@ public class LoginPos extends javax.swing.JFrame {
                 if (in.inicioSesion(txtUser.getText(), txtPass.getText())!= null) {
                     Vendedor ven = in.inicioSesion(txtUser.getText(), txtPass.getText());
                     NuevaVentaAgregarProductos datos = new NuevaVentaAgregarProductos();
-                    datos.datosVendedor(ven);
                     PanelAdministrador panel = new PanelAdministrador();
                     panel.datosCliente(ven);
                     panel.setVisible(true);
