@@ -237,6 +237,7 @@ public class NuevaVentaAgregarProductos extends javax.swing.JPanel {
 
             }
         ));
+        jTable1.setGridColor(new java.awt.Color(102, 102, 102));
         jTable1.setSelectionBackground(new java.awt.Color(255, 255, 255));
         jTable1.setShowGrid(true);
         jScrollPane1.setViewportView(jTable1);
@@ -260,9 +261,7 @@ public class NuevaVentaAgregarProductos extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -271,9 +270,7 @@ public class NuevaVentaAgregarProductos extends javax.swing.JPanel {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -688,7 +685,9 @@ public class NuevaVentaAgregarProductos extends javax.swing.JPanel {
             tabla.setValueAt(faa.getSubTotalProductos(), i, 4);
         }
     }
-
+    
+    
+    //Imprimimos el PDF
     public void exportarPDF(int id) throws SQLException {
         Document doc = new Document();
         try {
@@ -743,18 +742,23 @@ public class NuevaVentaAgregarProductos extends javax.swing.JPanel {
 
                     PdfPCell celdaC = new PdfPCell(new Phrase("Cantidad", fontHeader));
                     celdaC.setBackgroundColor(BaseColor.GRAY);
+                    celdaC.setBorder(PdfPCell.NO_BORDER);
                     tabla.addCell(celdaC);
 
                     PdfPCell celdaN = new PdfPCell(new Phrase("Nombre", fontHeader));
                     celdaN.setBackgroundColor(BaseColor.GRAY);
+                    celdaC.setBorder(PdfPCell.NO_BORDER);
+                    
                     tabla.addCell(celdaN);
 
                     PdfPCell celdaP = new PdfPCell(new Phrase("Precio", fontHeader));
                     celdaP.setBackgroundColor(BaseColor.GRAY);
+                    celdaC.setBorder(PdfPCell.NO_BORDER);
                     tabla.addCell(celdaP);
 
                     PdfPCell celdaT = new PdfPCell(new Phrase("Total", fontHeader));
                     celdaT.setBackgroundColor(BaseColor.GRAY);
+                    celdaC.setBorder(PdfPCell.NO_BORDER);
                     tabla.addCell(celdaT);
 
                     String sql2 = "SELECT detalle_venta.cantidad, productos.nombre, detalle_venta.precioUnitario, detalle_venta.totalDetalle from detalle_venta INNER JOIN productos on detalle_venta.id_producto = productos.codigo WHERE id_numeroFactura =?;";

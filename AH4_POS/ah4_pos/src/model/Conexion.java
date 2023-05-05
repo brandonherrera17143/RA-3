@@ -6,8 +6,8 @@ import java.sql.DriverManager;
 
 public class Conexion {
     Connection con;
-    //String url = "jdbc:mysql://localhost:3307/pos_ra";
-    String url = "jdbc:mysql://localhost:3306/pos_ra";
+    String url = "jdbc:mysql://localhost:3307/db_pos";
+    //String url = "jdbc:mysql://localhost:3306/pos_ra";
     String user = "root";
     String pass = "1234";
 
