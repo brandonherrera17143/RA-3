@@ -1,11 +1,28 @@
 package ventanasPanelVendedor;
 
-import disenoNuevo.*;
+import clases.Factura;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import model.Conexion;
+import model.VenDaoRela;
 
 
 public class VentasListadoGeneral2 extends javax.swing.JPanel {
 
-   
+    Connection con;
+    PreparedStatement ps;
+    ResultSet rs;
+    Conexion acceso = new Conexion();
+    
     public VentasListadoGeneral2() {
         initComponents();
         btnRegresarTabla.setVisible(false);
@@ -20,16 +37,16 @@ public class VentasListadoGeneral2 extends javax.swing.JPanel {
         btnRegresarTabla = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JSeparator();
-        txtNombre = new javax.swing.JTextField();
+        nombre = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        txtFecha = new javax.swing.JTextField();
+        fecha = new javax.swing.JTextField();
         jSeparator9 = new javax.swing.JSeparator();
         jSeparator7 = new javax.swing.JSeparator();
-        txtNit = new javax.swing.JTextField();
+        nit = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jSeparator6 = new javax.swing.JSeparator();
-        txtNoFac = new javax.swing.JTextField();
+        fac = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jSeparator8 = new javax.swing.JSeparator();
@@ -39,6 +56,8 @@ public class VentasListadoGeneral2 extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jcFacturas = new javax.swing.JComboBox<>();
+        btnImprimir = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(910, 520));
@@ -78,25 +97,25 @@ public class VentasListadoGeneral2 extends javax.swing.JPanel {
                 btnBuscarActionPerformed(evt);
             }
         });
-        add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, 200, 30));
+        add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 160, 180, 30));
 
         jSeparator5.setBackground(new java.awt.Color(0, 0, 0));
         jSeparator5.setForeground(new java.awt.Color(0, 0, 0));
         add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 140, 230, 6));
 
-        txtNombre.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        txtNombre.setBorder(null);
-        txtNombre.addMouseListener(new java.awt.event.MouseAdapter() {
+        nombre.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        nombre.setBorder(null);
+        nombre.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtNombreMousePressed(evt);
+                nombreMousePressed(evt);
             }
         });
-        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+        nombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreActionPerformed(evt);
+                nombreActionPerformed(evt);
             }
         });
-        add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 120, 230, -1));
+        add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 120, 230, -1));
 
         jLabel4.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel4.setText("Nombre");
@@ -106,19 +125,19 @@ public class VentasListadoGeneral2 extends javax.swing.JPanel {
         jLabel9.setText("Fecha");
         add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 100, 50, 20));
 
-        txtFecha.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        txtFecha.setBorder(null);
-        txtFecha.addMouseListener(new java.awt.event.MouseAdapter() {
+        fecha.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        fecha.setBorder(null);
+        fecha.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtFechaMousePressed(evt);
+                fechaMousePressed(evt);
             }
         });
-        txtFecha.addActionListener(new java.awt.event.ActionListener() {
+        fecha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFechaActionPerformed(evt);
+                fechaActionPerformed(evt);
             }
         });
-        add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 120, 230, -1));
+        add(fecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 120, 230, -1));
 
         jSeparator9.setBackground(new java.awt.Color(0, 0, 0));
         jSeparator9.setForeground(new java.awt.Color(0, 0, 0));
@@ -128,19 +147,19 @@ public class VentasListadoGeneral2 extends javax.swing.JPanel {
         jSeparator7.setForeground(new java.awt.Color(0, 0, 0));
         add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 80, 230, -1));
 
-        txtNit.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        txtNit.setBorder(null);
-        txtNit.addMouseListener(new java.awt.event.MouseAdapter() {
+        nit.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        nit.setBorder(null);
+        nit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtNitMousePressed(evt);
+                nitMousePressed(evt);
             }
         });
-        txtNit.addActionListener(new java.awt.event.ActionListener() {
+        nit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNitActionPerformed(evt);
+                nitActionPerformed(evt);
             }
         });
-        add(txtNit, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 60, 230, -1));
+        add(nit, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 60, 230, -1));
 
         jLabel6.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel6.setText("NIT");
@@ -150,19 +169,19 @@ public class VentasListadoGeneral2 extends javax.swing.JPanel {
         jSeparator6.setForeground(new java.awt.Color(0, 0, 0));
         add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, 230, 10));
 
-        txtNoFac.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        txtNoFac.setBorder(null);
-        txtNoFac.addMouseListener(new java.awt.event.MouseAdapter() {
+        fac.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        fac.setBorder(null);
+        fac.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtNoFacMousePressed(evt);
+                facMousePressed(evt);
             }
         });
-        txtNoFac.addActionListener(new java.awt.event.ActionListener() {
+        fac.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNoFacActionPerformed(evt);
+                facActionPerformed(evt);
             }
         });
-        add(txtNoFac, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 60, 230, -1));
+        add(fac, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 60, 230, -1));
 
         jLabel5.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel5.setText("No. Factura");
@@ -200,18 +219,10 @@ public class VentasListadoGeneral2 extends javax.swing.JPanel {
 
             },
             new String [] {
-                "No. Factura", "NIT", "Nombre", "Fecha", "Total", "Acciones"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.Float.class, java.lang.Object.class
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
             }
-        });
-        jTable1.setGridColor(new java.awt.Color(255, 255, 255));
+        ));
+        jTable1.setGridColor(new java.awt.Color(102, 102, 102));
         jTable1.setSelectionBackground(new java.awt.Color(255, 255, 255));
         jTable1.setShowGrid(true);
         jScrollPane1.setViewportView(jTable1);
@@ -228,6 +239,24 @@ public class VentasListadoGeneral2 extends javax.swing.JPanel {
         );
 
         add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 830, 270));
+
+        add(jcFacturas, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 160, 150, -1));
+
+        btnImprimir.setBackground(new java.awt.Color(84, 166, 234));
+        btnImprimir.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        btnImprimir.setForeground(new java.awt.Color(255, 255, 255));
+        btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/BUSCAR.png"))); // NOI18N
+        btnImprimir.setText("IMPRIMIR");
+        btnImprimir.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 20, 1, 1, new java.awt.Color(0, 0, 0)));
+        btnImprimir.setBorderPainted(false);
+        btnImprimir.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnImprimir.setIconTextGap(15);
+        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirActionPerformed(evt);
+            }
+        });
+        add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 160, 140, 30));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarTablaActionPerformed
@@ -236,40 +265,81 @@ public class VentasListadoGeneral2 extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRegresarTablaActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        if (fac.getText().isEmpty() && nit.getText().isEmpty() && nombre.getText().isEmpty() && fecha.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debes ingresar al menos una dato para filtra! :(");
+        } else{
+            int f = -1;
+            int ni = -1;
+            String no = null;
+            String fe = null;
+            
+            if (fac.getText().isEmpty()) {
+                f = -1;
+            }else{
+                f = Integer.parseInt(fac.getText());
+            }
+            
+            if (nit.getText().isEmpty()) {
+                ni = -1;
+            }else{
+                ni = Integer.parseInt(nit.getText());
+            }
+            if (nombre.getText().isEmpty()) {
+                no = null;
+            }else{
+                no = nombre.getText();
+            }
+            if (fecha.getText().isEmpty()) {
+                fe = null;
+            }else{
+                fe = fecha.getText();
+            }
+            int idVen = VenDaoRela.idVendedor;
+            filtroCliente(idVen,f,ni,no,fe);
+            llenar();
+        }
 
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void txtNombreMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtNombreMousePressed
+    private void nombreMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nombreMousePressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreMousePressed
+    }//GEN-LAST:event_nombreMousePressed
 
-    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
+    private void nombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreActionPerformed
+    }//GEN-LAST:event_nombreActionPerformed
 
-    private void txtFechaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtFechaMousePressed
+    private void fechaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fechaMousePressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechaMousePressed
+    }//GEN-LAST:event_fechaMousePressed
 
-    private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
+    private void fechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fechaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechaActionPerformed
+    }//GEN-LAST:event_fechaActionPerformed
 
-    private void txtNitMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtNitMousePressed
+    private void nitMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nitMousePressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNitMousePressed
+    }//GEN-LAST:event_nitMousePressed
 
-    private void txtNitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNitActionPerformed
+    private void nitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nitActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNitActionPerformed
+    }//GEN-LAST:event_nitActionPerformed
 
-    private void txtNoFacMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtNoFacMousePressed
+    private void facMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_facMousePressed
 
-    }//GEN-LAST:event_txtNoFacMousePressed
+    }//GEN-LAST:event_facMousePressed
 
-    private void txtNoFacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoFacActionPerformed
+    private void facActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_facActionPerformed
 
-    }//GEN-LAST:event_txtNoFacActionPerformed
+    }//GEN-LAST:event_facActionPerformed
+
+    private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+        try {
+            clienteSeleccionado();
+        } catch (SQLException ex) {
+            Logger.getLogger(VentasListadoGeneral2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnImprimirActionPerformed
 
     public void botonRegresar(boolean click) {
         
@@ -280,10 +350,200 @@ public class VentasListadoGeneral2 extends javax.swing.JPanel {
         }
 
     }
+    
+     LinkedList<Factura> result = new LinkedList();
+    public void filtroCliente(int id_vendedor, int fac, int nit, String nombre, String fecha) {
+        
+        int faOb;
+        String nombreOb;
+        int nitOb; 
+        Date fechaOb;
+        float totalFacOb;
+        String sql = null;
 
+        if (fac >= 0 && nit == -1 && nombre == null && fecha == null) { // factura   ********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (numero_factura like '"+fac+"%' or numero_factura like '%"+fac+"' or numero_factura like '%"+fac+"%' or numero_factura ='"+fac+"');";
+        } else if(fac == -1 && nit >= 0 && nombre == null && fecha == null){ // nit   ********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (nit like '"+nit+"%' or nit like '%"+nit+"' or nit like '%"+nit+"%' or nit ='"+nit+"');";
+        } else if(fac == -1 && nit == -1 && nombre != null && fecha == null){ // NOMBRE   ********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (nombre like '"+nombre+"%' or nombre like '%"+nombre+"' or nombre like '%"+nombre+"%' or nombre ='"+nombre+"');";
+        } else if(fac == -1 && nit == -1 && nombre == null && fecha != null){ // FECHA   ********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (fechaEmision ='"+fecha+"');";
+        } else if(fac >= 0 && nit >= 0 && nombre == null && fecha == null) { // factura   nit   ********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (numero_factura like '"+fac+"%' or numero_factura like '%"+fac+"' or numero_factura like '%"+fac+"%' or numero_factura ='"+fac+"')\n"
+                    + "and (nit like '"+nit+"%' or nit like '%"+nit+"' or nit like '%"+nit+"%' or nit ='"+nit+"');";
+        } else if (fac >= 0 && nit == -1 && nombre != null && fecha == null) { // factura   nombre  ********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (numero_factura like '"+fac+"%' or numero_factura like '%"+fac+"' or numero_factura like '%"+fac+"%' or numero_factura ='"+fac+"')\n"
+                    + "and (nombre like '"+nombre+"%' or nombre like '%"+nombre+"' or nombre like '%"+nombre+"%' or nombre ='"+nombre+"');";
+        } else if (fac >= 0 && nit == -1 && nombre == null && fecha != null) { // factura  fecha ********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (numero_factura like '"+fac+"%' or numero_factura like '%"+fac+"' or numero_factura like '%"+fac+"%' or numero_factura ='"+fac+"')\n"
+                    + "and (fechaEmision ='"+fecha+"');";
+        } else if(fac == -1 && nit >= 0 && nombre != null && fecha == null){ // nit nombre  ********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (nit like '"+nit+"%' or nit like '%"+nit+"' or nit like '%"+nit+"%' or nit ='"+nit+"')\n"
+                    + "and (nombre like '"+nombre+"%' or nombre like '%"+nombre+"' or nombre like '%"+nombre+"%' or nombre ='"+nombre+"');";
+        } else if(fac == -1 && nit >= 0 && nombre == null && fecha != null){ // nit fechaaa  ********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (nit like '"+nit+"%' or nit like '%"+nit+"' or nit like '%"+nit+"%' or nit ='"+nit+"')\n"
+                    + "and (fechaEmision ='"+fecha+"');";
+        } else if(fac == -1 && nit == -1 && nombre != null && fecha != null){ // NOMBRE fechaaa  ********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (nombre like '"+nombre+"%' or nombre like '%"+nombre+"' or nombre like '%"+nombre+"%' or nombre ='"+nombre+"')\n"
+                    + "and (fechaEmision ='"+fecha+"');";
+        } else if(fac >= 0 && nit >= 0 && nombre != null && fecha == null) { // factura   nit   nombre  **********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (numero_factura like '"+fac+"%' or numero_factura like '%"+fac+"' or numero_factura like '%"+fac+"%' or numero_factura ='"+fac+"')\n"
+                    + "and (nit like '"+nit+"%' or nit like '%"+nit+"' or nit like '%"+nit+"%' or nit ='"+nit+"')\n"
+                    + "and (nombre like '"+nombre+"%' or nombre like '%"+nombre+"' or nombre like '%"+nombre+"%' or nombre ='"+nombre+"');";
+        } else if (fac >= 0 && nit == -1 && nombre != null && fecha != null) { // factura   nombre  fechaaa    ********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (numero_factura like '"+fac+"%' or numero_factura like '%"+fac+"' or numero_factura like '%"+fac+"%' or numero_factura ='"+fac+"')\n"
+                    + "and (nombre like '"+nombre+"%' or nombre like '%"+nombre+"' or nombre like '%"+nombre+"%' or nombre ='"+nombre+"')\n"
+                    + "and (fechaEmision ='"+fecha+"');";
+        } else if(fac == -1 && nit >= 0 && nombre != null && fecha != null){ // nit nombre  fecha  ********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (nit like '"+nit+"%' or nit like '%"+nit+"' or nit like '%"+nit+"%' or nit ='"+nit+"')\n"
+                    + "and (nombre like '"+nombre+"%' or nombre like '%"+nombre+"' or nombre like '%"+nombre+"%' or nombre ='"+nombre+"')\n"
+                    + "and (fechaEmision ='"+fecha+"');"; 
+        } else if(fac >= 0 && nit >= 0 && nombre != null && fecha != null) { // factura   nit   nombre    fecha **********
+            sql = """
+                  select factura.numero_factura, clientes.nit, clientes.nombre, factura.fechaEmision, factura.totalFactura
+                  from clientes
+                  INNER JOIN factura on clientes.codigo = factura.id_vendedor WHERE id_vendedor = '"""+id_vendedor+"'\n" 
+                    + "and (numero_factura like '"+fac+"%' or numero_factura like '%"+fac+"' or numero_factura like '%"+fac+"%' or numero_factura ='"+fac+"')\n"
+                    + "and (nit like '"+nit+"%' or nit like '%"+nit+"' or nit like '%"+nit+"%' or nit ='"+nit+"')\n"
+                    + "and (nombre like '"+nombre+"%' or nombre like '%"+nombre+"' or nombre like '%"+nombre+"%' or nombre ='"+nombre+"')\n"
+                    + "and (fechaEmision ='"+fecha+"');";
+        }
+        
+      
+        LinkedList<Factura> resultados = new LinkedList();
+        int cont = 0;
+        try {
+            con = acceso.Conectar();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+                cont++;
+                faOb = rs.getInt(1);
+                nitOb = rs.getInt(2);
+                nombreOb = rs.getString(3);                
+                fechaOb = rs.getDate(4);
+                totalFacOb = rs.getFloat(5);
+                resultados.add(new Factura(faOb,nitOb,nombreOb,fechaOb,totalFacOb));
+            }
+            
+            result = resultados;
+            for (Factura ff: resultados) {
+                int idFactu = ff.getId_factura();
+                jcFacturas.addItem(idFactu + "");
+            }
+    
+            if (cont != 0) {   
+                JOptionPane.showMessageDialog(null, "Se encontraron " + cont + " resultados");
+            } else if (cont == 1) {
+                JOptionPane.showMessageDialog(null, "Se encontro " + cont + " resultado");
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay resultados");
+            }
+            System.out.println("contador = " + cont);
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+     private DefaultTableModel modelo;
+     public void llenar() {
+        modelo = new DefaultTableModel(new String[]{"No. Factura", "Nit", "Nombre", "Fecha Compra", "Total Factura"}, result.size());
+        jTable1.setModel(modelo);
+        TableModel tabla = jTable1.getModel();
+        for (int i = 0; i < result.size(); i++) {
+            Factura faa = result.get(i);
+            tabla.setValueAt(faa.getId_factura(), i, 0);
+            tabla.setValueAt(faa.getNitCliente(), i, 1);
+            tabla.setValueAt(faa.getNombreCliente(), i, 2);
+            tabla.setValueAt(faa.getFecha_emision(), i, 3);
+            tabla.setValueAt(faa.getTotal_factura(), i, 4);
+        }
+    }
+     
+     public int clienteSeleccionado() throws SQLException{
+        int id = Integer.parseInt(jcFacturas.getSelectedItem().toString());
+        int idfactura = 0;
+        Factura factura = null;
+        for(Factura factu: result){ 
+            if (factu.getId_factura() == id ) {
+                factura = factu;
+                idfactura = factu.getId_factura();
+                break;
+            }
+            
+        }
+        
+        if(factura != null){
+            int idFacImprimir = idfactura;
+           // NuevaVentaAgregarProductos.lblNombreC.setText("Agregar productos a ");
+            NuevaVentaAgregarProductos pdf = new NuevaVentaAgregarProductos();
+            System.out.println("idfactura"+ idfactura);
+            pdf.exportarPDF(idFacImprimir);
+           
+               
+        }
+        return id;
+    }
+     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnRegresarTabla;
+    private javax.swing.JTextField fac;
+    private javax.swing.JTextField fecha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -301,9 +561,8 @@ public class VentasListadoGeneral2 extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtFecha;
-    private javax.swing.JTextField txtNit;
-    private javax.swing.JTextField txtNoFac;
-    private javax.swing.JTextField txtNombre;
+    private javax.swing.JComboBox<String> jcFacturas;
+    private javax.swing.JTextField nit;
+    private javax.swing.JTextField nombre;
     // End of variables declaration//GEN-END:variables
 }

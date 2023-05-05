@@ -135,54 +135,6 @@ public class VenDaoRela implements VenDao {
         return usuarioEncontrado;
     }
 
-//    @Override
-//    public boolean inicioSesion(String usuario, String pass) {
-//        boolean intentos = false;
-//       // Int  = null;
-//        String usuarioRegistrado = null;
-//        String passUser = null;
-//        String sql = "SELECT * FROM vendedores WHERE nombre='" + usuario + "' and password='" + pass + "'";
-//        
-//        LinkedList<Vendedor> elegido = new LinkedList();
-//        
-//        try {
-//            con = acceso.Conectar();
-//            ps = con.prepareStatement(sql);
-//            rs = ps.executeQuery();
-//
-//            if (rs.next()) {
-//                usuarioRegistrado = rs.getString(2);
-//                passUser = rs.getString(6);
-//                //elegido.add(new Vendedor(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getInt(4),rs.getString(5),rs.getString(6)));
-//                 
-//                
-//                if (usuario.equals(usuarioRegistrado) && pass.equals(passUser)) {
-//
-//                    PanelAdministrador panel = new PanelAdministrador();
-//                    panel.mostrarNombreUsuario(usuarioRegistrado);
-//                   // panel.datosCliente();
-//                    panel.setVisible(true);
-//                    intentos = true;
-//                } else if (!usuario.equals(usuarioRegistrado) || pass.equals(passUser)) {
-//                    intentos = false;
-//                }
-//            }
-//            
-//            
-//        } 
-//
-//        catch (HeadlessException | SQLException e) {
-//            System.out.println(e);
-//        }
-//        return intentos;
-//    }
-    
-    
-    
-    
-    
-    
-    
      @Override
     public Vendedor inicioSesion(String usuario, String pass) {
       //  int idOb = 0;

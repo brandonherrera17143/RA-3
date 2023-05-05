@@ -130,6 +130,7 @@ public class NuevaVentaPanelAdmin extends javax.swing.JPanel {
     private void btnRegresarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarTablaActionPerformed
         ShowPaneles(new NuevaVentaBienvenida());
         botonRegresar(false);
+        NuevaVentaPanelAdmin.btnAgregarProducto.setVisible(false);
     }//GEN-LAST:event_btnRegresarTablaActionPerformed
 
     public void botonRegresar(boolean click) {

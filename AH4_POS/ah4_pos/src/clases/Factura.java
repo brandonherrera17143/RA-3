@@ -14,7 +14,8 @@ public class Factura {
     private float precio;
     private float subTotalProductos;
     private String nombrePro;
-    
+    private int nitCliente;
+    private String nombreCliente;
     
     public Factura(){}
     
@@ -40,6 +41,37 @@ public class Factura {
         this.nombrePro = nombrePro;
     }
 
+    public Factura(int id_factura, int nitCliente, String nombreCliente, Date fecha_emision, float total_factura) {
+        this.id_factura = id_factura;
+        this.fecha_emision = fecha_emision;
+        this.total_factura = total_factura;
+        this.nitCliente = nitCliente;
+        this.nombreCliente = nombreCliente;
+    }
+    
+    
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+    
+    
+    
+
+    public int getNitCliente() {
+        return nitCliente;
+    }
+
+    public void setNitCliente(int nitCliente) {
+        this.nitCliente = nitCliente;
+    }
+    
+    
+    
     public int getId_caodigoPro() {
         return id_caodigoPro;
     }

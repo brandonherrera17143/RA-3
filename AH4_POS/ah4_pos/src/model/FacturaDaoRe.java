@@ -47,42 +47,6 @@ public class FacturaDaoRe implements FacturaDao {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-//    @Override
-//    public void crear_factura(Date fecha, int idVendedor, int idCliente, int idProducto, int cantidad, float precioUni) {
-//        String sql = "insert INTO factura(fechaEmision,id_vendedor,id_cliente,totalFactura) VALUES (?,?,?,?);";
-//        try {
-//            con = acceso.Conectar();
-//            ps = con.prepareStatement(sql);
-//            ps.setDate(1, fecha);
-//            ps.setInt(2, idVendedor);
-//            ps.setInt(3, idCliente);
-//            ps.setFloat(4, (float) 0.0);
-//
-//            int filasAfectadas = ps.executeUpdate();
-//
-//            if (filasAfectadas == 1) {
-//
-//                String sql2 = "SELECT LAST_INSERT_ID()";
-//                ps = con.prepareStatement(sql2);
-//                rs = ps.executeQuery();
-//                rs.next();
-//
-//                int id_factura = rs.getInt(1);
-//
-//                String sql3 = "INSERT INTO detalle_venta(id_numeroFactura, id_producto, cantidad, precioUnitario, totalDetalle) VALUES (?, ?, ?, ?, ?)";
-//                ps = con.prepareStatement(sql3);
-//                ps.setInt(1, id_factura);
-//                ps.setInt(2, idProducto);
-//                ps.setInt(3, cantidad);
-//                ps.setFloat(4, precioUni);
-//                ps.setFloat(5, 0);
-//                ps.executeUpdate();
-//            }
-//
-//        } catch (SQLException e) {
-//            JOptionPane.showMessageDialog(null, "No cuentas con las suficientes unidades!");
-//        }
-//    }
     @Override
     public void modificar_factura(Factura factura) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

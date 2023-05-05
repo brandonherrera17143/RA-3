@@ -378,7 +378,7 @@ public class NuevaVentaSeleccionarCliente extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Debes ingresar por lo menos un dato");
         } else {
             String nombre;
-            int nit = 0;
+            int nit = -1;
             String correo;
 
             if (txtNombre.getText().isEmpty()) {
@@ -388,7 +388,7 @@ public class NuevaVentaSeleccionarCliente extends javax.swing.JPanel {
             }
             try {
                 if (txtNit.getText().isEmpty()) {
-                    nit = 0;
+                    nit = -1;
                 } else {
                     nit = Integer.parseInt(txtNit.getText());
                 }
@@ -529,7 +529,6 @@ public class NuevaVentaSeleccionarCliente extends javax.swing.JPanel {
     LinkedList<Cliente> result = new LinkedList();
     public void filtroCliente(String nombre, int nit, String correo, String genero) {
         jcFiltroObtenido.removeAllItems();
-        System.out.println("nombre = " + nombre + ", nit = " + nit + ", Correo = " + correo + ", genero = " + genero);
         int codigoOb;
         String nombreOb;
         int nitOb;
@@ -537,42 +536,42 @@ public class NuevaVentaSeleccionarCliente extends javax.swing.JPanel {
         String generoOb;
         String sql = null;
 
-        if (nombre != null && nit == 0 && correo == null && genero == null) { // NOMBRE
+        if (nombre != null && nit == -1 && correo == null && genero == null) { // NOMBRE
             sql = "select * from clientes where nombre like '" + nombre + "%' or nombre like '%" + nombre + "' or nombre like '%" + nombre + "%' or nombre='" + nombre + "';";
-        } else if (nombre == null && nit != 0 && correo == null && genero == null) {// NIT
+        } else if (nombre == null && nit >= 0 && correo == null && genero == null) {// NIT
             sql = "select * from clientes where nit like '" + nit + "%' or nit like '%" + nit + "' or nit like '%" + nit + "%' or nit = '" + nit + "';";
-        } else if (nombre == null && nit == 0 && correo != null && genero == null) {// CORREO
+        } else if (nombre == null && nit == -1 && correo != null && genero == null) {// CORREO
             sql = "select * from clientes where correo like '" + correo + "%'or correo like '%" + correo + "%' or correo='" + correo + "';";
-        } else if (nombre == null && nit == 0 && correo == null && genero != null) { // GENERO
+        } else if (nombre == null && nit == -1 && correo == null && genero != null) { // GENERO
             sql = "select * from clientes where Genero='" + genero + "';";
-        } else if (nombre != null && nit != 0 && correo == null && genero == null) {// NOMBRE   NIT
+        } else if (nombre != null && nit >= 0 && correo == null && genero == null) {// NOMBRE   NIT
             sql = "select * from clientes where (nombre like '" + nombre + "%' or nombre like '%" + nombre + "' or nombre like '%" + nombre + "%' or nombre='" + nombre + "')\n"
                     + "and (nit like '" + nit + "%' or nit like '%" + nit + "' or nit like '%" + nit + "%' or nit = '" + nit + "');";
-        } else if (nombre != null && nit == 0 && correo != null && genero == null) {//  NOMBRE   CORREO
+        } else if (nombre != null && nit == -1 && correo != null && genero == null) {//  NOMBRE   CORREO
             sql = "select * from clientes where (nombre like '" + nombre + "%' or nombre like '%" + nombre + "' or nombre like '%" + nombre + "%' or nombre='" + nombre + "') AND (correo like '" + correo + "%' or correo like '%" + correo + "%' or correo='" + correo + "');";
-        } else if (nombre != null && nit == 0 && correo == null && genero != null) {// NOMBRE  GENERO
+        } else if (nombre != null && nit == -1 && correo == null && genero != null) {// NOMBRE  GENERO
             sql = "select * from clientes where (nombre like '" + nombre + "%' or nombre like '%" + nombre + "' or nombre like '%" + nombre + "%' or nombre='" + nombre + "') AND Genero='" + genero + "';";
-        } else if (nombre == null && nit != 0 && correo != null && genero == null) { // NIT   CORREO
+        } else if (nombre == null && nit >= 0 && correo != null && genero == null) { // NIT   CORREO
             sql = "select * from clientes where (nit like '" + nit + "%' or nit like '%" + nit + "' or nit like '%" + nit + "%' or nit = '" + nit + "')\n"
                     + "AND (correo like '" + correo + "%' or correo like '%" + correo + "%' or correo='" + correo + "');";
-        } else if (nombre == null && nit != 0 && correo == null && genero != null) { // NIT   GENERO
+        } else if (nombre == null && nit >= 0 && correo == null && genero != null) { // NIT   GENERO
             sql = "select * from clientes where (nit like '" + nit + "%' or nit like '%" + nit + "' or nit like '%" + nit + "%' or nit = '" + nit + "') AND Genero='" + genero + "';";
-        } else if (nombre == null && nit == 0 && correo != null && genero != null) { // CORREO  GENERO
+        } else if (nombre == null && nit == -1 && correo != null && genero != null) { // CORREO  GENERO
             sql = "select * from clientes where (correo like '" + correo + "%'or correo like '%" + correo + "%' or correo='" + correo + "') AND Genero='" + genero + "';";
-        } else if (nombre != null && nit != 0 && correo != null && genero == null) {// NOMBRE  NIT   CORREO
+        } else if (nombre != null && nit >= 0 && correo != null && genero == null) {// NOMBRE  NIT   CORREO
             sql = "select * from clientes where (nombre like '" + nombre + "%' or nombre like '%" + nombre + "' or nombre like '%" + nombre + "%' or nombre='" + nombre + "')\n"
                     + "AND (nit like '" + nit + "%' or nit like '%" + nit + "' or nit like '%" + nit + "%' or nit = '" + nit + "')\n"
                     + "AND (correo like '" + correo + "%' or correo like '%" + correo + "%' or correo='" + correo + "');";
-        } else if (nombre != null && nit != 0 && correo == null && genero != null) { // NOMBRE  NIT  GENERO
+        } else if (nombre != null && nit >= 0 && correo == null && genero != null) { // NOMBRE  NIT  GENERO
             sql = "select * from clientes where (nombre like '" + nombre + "%' or nombre like '%" + nombre + "' or nombre like '%" + nombre + "%' or nombre='" + nombre + "')\n"
                     + "AND (nit like '" + nit + "%' or nit like '%" + nit + "' or nit like '%" + nit + "%' or nit = '" + nit + "')  AND (Genero='" + genero + "');";
-        } else if (nombre != null && nit == 0 && correo != null && genero != null) { // NOMBRE  CORREO   GENERO
+        } else if (nombre != null && nit == -1 && correo != null && genero != null) { // NOMBRE  CORREO   GENERO
             sql = "select * from clientes where (nombre like '" + nombre + "%' or nombre like '%" + nombre + "' or nombre like '%" + nombre + "%' or nombre='" + nombre + "')\n"
                     + "AND (correo like '" + correo + "%' or correo like '%" + correo + "%' or correo='" + correo + "') AND (Genero='" + genero + "');";
-        } else if (nombre == null && nit != 0 && correo != null && genero != null) { // NIT  CORREO  GENERO
+        } else if (nombre == null && nit >= 0 && correo != null && genero != null) { // NIT  CORREO  GENERO
             sql = "select * from clientes where (nit like '" + nit + "%' or nit like '%" + nit + "' or nit like '%" + nit + "%' or nit = '" + nit + "')\n"
                     + "AND (correo like '" + correo + "%' or correo like '%" + correo + "%' or correo='" + correo + "') AND (Genero='" + genero + "');";
-        } else if (nombre != null && nit != 0 && correo != null && genero != null) {// NOMBRE  NIT   CORRE  GENERO
+        } else if (nombre != null && nit >= 0 && correo != null && genero != null) {// NOMBRE  NIT   CORRE  GENERO
             sql = "select * from clientes where (nombre like '" + nombre + "%' or nombre like '%" + nombre + "' or nombre like '%" + nombre + "%' or nombre='" + nombre + "')\n"
                     + "AND (nit like '" + nit + "%' or nit like '%" + nit + "' or nit like '%" + nit + "%' or nit = '" + nit + "')\n"
                     + "AND (correo like '" + correo + "%' or correo like '%" + correo + "%' or correo='" + correo + "') AND (Genero='" + genero + "');";
@@ -598,10 +597,7 @@ public class NuevaVentaSeleccionarCliente extends javax.swing.JPanel {
             result = resultados;
          
             for (Cliente c : resultados) {
-
-                System.out.println("nombre = " + c.getNombre());
-                String n = c.getNombre();
-                
+                String n = c.getNombre();      
                 jcFiltroObtenido.addItem(n);
             }
  
@@ -636,10 +632,8 @@ public class NuevaVentaSeleccionarCliente extends javax.swing.JPanel {
             }
             
         }
-        idCliente = id;
-        System.out.println("id seleccionadoooooooooooo = " + id);
+        idCliente = id;  
         if(cliente != null){
-           // NuevaVentaAgregarProductos.lblNombreC.setText("Agregar productos a ");
             NuevaVentaAgregarProductos facCliente = new NuevaVentaAgregarProductos();
             facCliente.datosCliente(cliente);
            
